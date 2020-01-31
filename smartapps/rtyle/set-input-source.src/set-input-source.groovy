@@ -27,23 +27,23 @@ definition(
 
 preferences {
 	section() {
-        input 'players'		, 'capability.mediaInputSource'	, title: 'Players'		, multiple: true
-        input 'inputSource'	, 'text'						, title: 'Input Source'
-        input 'switches'	, 'capability.switch'			, title: 'Switches'		, multiple: true,	required: false
-        input 'sensors'		, 'capability.contactSensor'	, title: 'Sensors'		, multiple: true,	required: false
-    }
+		input 'players'		, 'capability.mediaInputSource'	, title: 'Players'		, multiple: true
+		input 'inputSource'	, 'text'						, title: 'Input Source'
+		input 'switches'	, 'capability.switch'			, title: 'Switches'		, multiple: true,	required: false
+		input 'sensors'		, 'capability.contactSensor'	, title: 'Sensors'		, multiple: true,	required: false
+	}
 }
 
 private void respond(String message) {
 	log.info message
-    if (false
-    	|| switches	.find {'on'		== it.currentSwitch}
-        || sensors	.find {'closed'	== it.currentContact}
-    ) {
-    	log.info "setInputSource $inputSource"
-    	players.on()
-    	players.setInputSource inputSource
-    }
+	if (false
+		|| switches	.find {'on'		== it.currentSwitch}
+		|| sensors	.find {'closed'	== it.currentContact}
+	) {
+		log.info "setInputSource $inputSource"
+		players.on()
+		players.setInputSource inputSource
+	}
 }
 
 def getIndent() {/* non-breaking space */ '\u00a0' * 8}
@@ -58,7 +58,7 @@ void respondToContact(physicalgraph.app.EventWrapper e) {
 
 private void initialize() {
 	subscribe switches	, 'switch'	, respondToSwitch
-    subscribe sensors	, 'contact'	, respondToContact
+	subscribe sensors	, 'contact'	, respondToContact
 }
 
 def installed() {
