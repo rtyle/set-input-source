@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1024mm"
@@ -20,7 +21,30 @@
    inkscape:export-xdpi="4.4648438"
    inkscape:export-ydpi="4.4648438">
   <defs
-     id="defs2" />
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2404">
+      <stop
+         style="stop-color:#f2f2f2;stop-opacity:1;"
+         offset="0"
+         id="stop2400" />
+      <stop
+         style="stop-color:#808080;stop-opacity:1"
+         offset="1"
+         id="stop2402" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2404"
+       id="radialGradient2408"
+       cx="0"
+       cy="0"
+       fx="0"
+       fy="0"
+       r="512"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -29,14 +53,14 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="1330.3906"
+     inkscape:cx="724.67631"
      inkscape:cy="2227.5398"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="2049"
+     inkscape:window-width="2903"
      inkscape:window-height="1572"
-     inkscape:window-x="1748"
+     inkscape:window-x="894"
      inkscape:window-y="33"
      inkscape:window-maximized="0" />
   <metadata
@@ -57,17 +81,13 @@
      id="layer1"
      transform="translate(512,512)">
     <circle
-       style="opacity:1;fill:#606060;fill-opacity:1;stroke:none;stroke-width:1.58749998;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:url(#radialGradient2408);fill-opacity:1;stroke:none;stroke-width:1.58749998;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path37"
        cx="0"
        cy="0"
-       r="512" />
-    <circle
-       r="424"
-       cy="0"
-       cx="0"
-       id="circle39"
-       style="opacity:1;fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.58749998;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       r="512"
+       inkscape:export-xdpi="1.4882812"
+       inkscape:export-ydpi="1.4882812" />
     <g
        id="g113"
        style="fill:#ffffff;fill-opacity:1">
