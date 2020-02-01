@@ -32,9 +32,9 @@ preferences {
 		input 'inputSource'				, 'text'						, title: 'Input source'
 	}
 	section('Triggers') {
-		input 'switchTriggers'			, 'capability.switch'			, title: 'Switch triggers (when on)'				, multiple: true,	required: false
-		input 'contactSensorTriggers'	, 'capability.contactSensor'	, title: 'Contact Sensor triggers (when closed)'	, multiple: true,	required: false
-		input 'mediaPlaybackTriggers'	, 'capability.mediaPlayback'	, title: 'Media Playback triggers (when playing)'	, multiple: true,	required: false
+		input 'switchTriggers'			, 'capability.switch'			, title: 'Switch triggers (when turned on)'				, multiple: true,	required: false
+		input 'contactSensorTriggers'	, 'capability.contactSensor'	, title: 'Contact Sensor triggers (when closed)'		, multiple: true,	required: false
+		input 'mediaPlaybackTriggers'	, 'capability.mediaPlayback'	, title: 'Media Playback triggers (when starts playing)', multiple: true,	required: false
 	}
 }
 
@@ -53,22 +53,22 @@ private void respond(String message) {
 
 def getIndent() {/* non-breaking space */ '\u00a0' * 8}
 
-void respondToSwitch(physicalgraph.app.EventWrapper e) {
+void respondToSwitchOn(physicalgraph.app.EventWrapper e) {
 	respond(indent + "⚡ $e.value $e.name $e.device")
 }
 
-void respondToContact(physicalgraph.app.EventWrapper e) {
-	respond(indent + "⚡ $e.value $e.name $e.device")
+void respondToContactClosed(physicalgraph.app.EventWrapper e) {
+	respond(indent + "⛝ $e.value $e.name $e.device")
 }
 
-void respondToPlaybackStatus(physicalgraph.app.EventWrapper e) {
-	respond(indent + "⚡ $e.value $e.name $e.device")
+void respondToPlaybackStatusPlaying(physicalgraph.app.EventWrapper e) {
+	respond(indent + "♬ $e.value $e.name $e.device")
 }
 
 private void initialize() {
-	subscribe switchTriggers		, 'switch'			, respondToSwitch
-	subscribe contactSensorTriggers	, 'contact'			, respondToContact
-	subscribe mediaPlaybackTriggers	, 'playbackStatus'	, respondToPlaybackStatus
+	subscribe switchTriggers		, 'switch.on'				, respondToSwitchOn
+	subscribe contactSensorTriggers	, 'contact.closed'			, respondToContactClosed
+	subscribe mediaPlaybackTriggers	, 'playbackStatus.playing'	, respondToPlaybackStatusPlaying
 }
 
 def installed() {
