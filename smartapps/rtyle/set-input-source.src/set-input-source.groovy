@@ -17,7 +17,7 @@ definition(
 	name			: 'Set Input Source',
 	namespace		: 'rtyle',
 	author			: 'Ross Tyler',
-	description		: 'Set the input source of media players when a switch or sensor closes',
+	description		: 'Set the input source of targets when triggered',
 	category		: 'Convenience',
 	singleInstance	: false,
 	iconUrl			: 'https://raw.githubusercontent.com/rtyle/set-input-source/master/smartapps/rtyle/set-input-source.src/app.png',
@@ -26,23 +26,28 @@ definition(
 )
 
 preferences {
-	section() {
-		input 'players'		, 'capability.mediaInputSource'	, title: 'Players'		, multiple: true
-		input 'inputSource'	, 'text'						, title: 'Input Source'
-		input 'switches'	, 'capability.switch'			, title: 'Switches'		, multiple: true,	required: false
-		input 'sensors'		, 'capability.contactSensor'	, title: 'Sensors'		, multiple: true,	required: false
+	section('Targets') {
+		input 'switchTargets'			, 'capability.switch'			, title: 'Switch targets (turned on when triggered)'		, multiple: true, required: false
+		input 'mediaInputSourceTargets'	, 'capability.mediaInputSource'	, title: 'Media input source targets (set when triggered)'	, multiple: true
+		input 'inputSource'				, 'text'						, title: 'Input source'
+	}
+	section('Triggers') {
+		input 'switchTriggers'			, 'capability.switch'			, title: 'Switch triggers (when on)'				, multiple: true,	required: false
+		input 'contactSensorTriggers'	, 'capability.contactSensor'	, title: 'Contact Sensor triggers (when closed)'	, multiple: true,	required: false
+		input 'mediaPlaybackTriggers'	, 'capability.mediaPlayback'	, title: 'Media Playback triggers (when playing)'	, multiple: true,	required: false
 	}
 }
 
 private void respond(String message) {
 	log.info message
 	if (false
-		|| switches	.find {'on'		== it.currentSwitch}
-		|| sensors	.find {'closed'	== it.currentContact}
+		|| switchTriggers		.find {'on'			== it.currentSwitch}
+		|| contactSensorTriggers.find {'closed'		== it.currentContact}
+		|| mediaPlaybackTriggers.find {'playing'	== it.currentPlaybackStatus}
 	) {
 		log.info "setInputSource $inputSource"
-		players.on()
-		players.setInputSource inputSource
+		switchTargets.on()
+		mediaInputSourceTargets.setInputSource inputSource
 	}
 }
 
@@ -56,9 +61,14 @@ void respondToContact(physicalgraph.app.EventWrapper e) {
 	respond(indent + "⚡ $e.value $e.name $e.device")
 }
 
+void respondToPlaybackStatus(physicalgraph.app.EventWrapper e) {
+	respond(indent + "⚡ $e.value $e.name $e.device")
+}
+
 private void initialize() {
-	subscribe switches	, 'switch'	, respondToSwitch
-	subscribe sensors	, 'contact'	, respondToContact
+	subscribe switchTriggers		, 'switch'			, respondToSwitch
+	subscribe contactSensorTriggers	, 'contact'			, respondToContact
+	subscribe mediaPlaybackTriggers	, 'playbackStatus'	, respondToPlaybackStatus
 }
 
 def installed() {
