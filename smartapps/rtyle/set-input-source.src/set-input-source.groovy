@@ -1,4 +1,4 @@
-// vim: ts=4:sw=6
+// vim: ts=4:sw=4
 /**
  *	Set Input Source
  *
@@ -28,7 +28,7 @@ definition(
 preferences {
 	section('Targets') {
 		input 'switchTargets'			, 'capability.switch'			, title: 'Switch targets (turned on when triggered)'		, multiple: true, required: false
-        input 'turnOffToo'				, 'bool'						, title: 'Turn off too'
+		input 'turnOffToo'				, 'bool'						, title: 'Turn off too'
 		input 'mediaInputSourceTargets'	, 'capability.mediaInputSource'	, title: 'Media input source targets (set when triggered)'	, multiple: true, required: false
 		input 'inputSource'				, 'text'						, title: 'Input source'														, required: false
 	}
@@ -48,18 +48,18 @@ private void respond(String message) {
 	) {
 		if (switchTargets) {
 			log.info "turn on $switchTargets"
-        	switchTargets.on()
+			switchTargets.on()
 		}
 		if (mediaInputSourceTargets && inputSource) {
 			log.info "setInputSource to $inputSource on $mediaInputSourceTargets"
-        	mediaInputSourceTargets.setInputSource inputSource
+			mediaInputSourceTargets.setInputSource inputSource
 		}
 	} else {
-    	if (turnOffToo && switchTargets) {
+		if (turnOffToo && switchTargets) {
 			log.info "turn off $switchTargets"
-        	switchTargets.off()
-        }
-    }
+			switchTargets.off()
+		}
+}
 }
 
 def getIndent() {/* non-breaking space */ '\u00a0' * 8}
@@ -93,11 +93,11 @@ private void initialize() {
 	subscribe contactSensorTriggers	, 'contact.closed'			, respondToContactClosed
 	subscribe mediaPlaybackTriggers	, 'playbackStatus.playing'	, respondToPlaybackStatusPlaying
 	subscribe mediaPlaybackTriggers	, 'playbackStatus.paused'	, respondToPlaybackStatusPaused
-    if (turnOffToo) {
+	if (turnOffToo) {
 	subscribe switchTriggers		, 'switch.off'				, respondToSwitchOff
 	subscribe contactSensorTriggers	, 'contact.open'			, respondToContactOpen
 	subscribe mediaPlaybackTriggers	, 'playbackStatus.stopped'	, respondToPlaybackStatusStopped
-    }
+	}
 }
 
 def installed() {
