@@ -1,5 +1,5 @@
 # set-input-source
-SmartThings SmartApp to set the input source of a Media Input Source capable device when a Switch turns on, a Contact sensor closes or a Media Playback device starts playing.
+SmartThings SmartApp to set the input source of a Media Input Source capable device when a Switch turns on, a Contact Sensor closes or a Media Playback device starts playing.
 
 I use this to turn on the "Main Zone" and select the "TV" input on my Denon AVR when the connected TV turns on. Similarly, the "BD" (Sonos) input is selected when it starts playing.
 
