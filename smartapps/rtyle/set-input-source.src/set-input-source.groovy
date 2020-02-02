@@ -28,8 +28,9 @@ definition(
 preferences {
 	section('Targets') {
 		input 'switchTargets'			, 'capability.switch'			, title: 'Switch targets (turned on when triggered)'		, multiple: true, required: false
-		input 'mediaInputSourceTargets'	, 'capability.mediaInputSource'	, title: 'Media input source targets (set when triggered)'	, multiple: true
-		input 'inputSource'				, 'text'						, title: 'Input source'
+        input 'turnOffToo'				, 'bool'						, title: 'Turn off too'
+		input 'mediaInputSourceTargets'	, 'capability.mediaInputSource'	, title: 'Media input source targets (set when triggered)'	, multiple: true, required: false
+		input 'inputSource'				, 'text'						, title: 'Input source'														, required: false
 	}
 	section('Triggers') {
 		input 'switchTriggers'			, 'capability.switch'			, title: 'Switch triggers (when turned on)'				, multiple: true,	required: false
@@ -43,32 +44,60 @@ private void respond(String message) {
 	if (false
 		|| switchTriggers		.find {'on'			== it.currentSwitch}
 		|| contactSensorTriggers.find {'closed'		== it.currentContact}
-		|| mediaPlaybackTriggers.find {'playing'	== it.currentPlaybackStatus}
+		|| mediaPlaybackTriggers.find {'stopped'	!= it.currentPlaybackStatus}
 	) {
-		log.info "setInputSource $inputSource"
-		switchTargets.on()
-		mediaInputSourceTargets.setInputSource inputSource
-	}
+		if (switchTargets) {
+			log.info "turn on $switchTargets"
+        	switchTargets.on()
+		}
+		if (mediaInputSourceTargets && inputSource) {
+			log.info "setInputSource to $inputSource on $mediaInputSourceTargets"
+        	mediaInputSourceTargets.setInputSource inputSource
+		}
+	} else {
+    	if (turnOffToo && switchTargets) {
+			log.info "turn off $switchTargets"
+        	switchTargets.off()
+        }
+    }
 }
 
 def getIndent() {/* non-breaking space */ '\u00a0' * 8}
 
 void respondToSwitchOn(physicalgraph.app.EventWrapper e) {
-	respond(indent + "⚡ $e.value $e.name $e.device")
+	respond(indent + "⏻ $e.value $e.name $e.device")
+}
+void respondToSwitchOff(physicalgraph.app.EventWrapper e) {
+	respond(indent + "⭘ $e.value $e.name $e.device")
 }
 
 void respondToContactClosed(physicalgraph.app.EventWrapper e) {
-	respond(indent + "⛝ $e.value $e.name $e.device")
+	respond(indent + "☒ $e.value $e.name $e.device")
+}
+void respondToContactOpen(physicalgraph.app.EventWrapper e) {
+	respond(indent + "☐ $e.value $e.name $e.device")
 }
 
 void respondToPlaybackStatusPlaying(physicalgraph.app.EventWrapper e) {
-	respond(indent + "♬ $e.value $e.name $e.device")
+	respond(indent + "⏵ $e.value $e.name $e.device") //
+}
+void respondToPlaybackStatusPaused(physicalgraph.app.EventWrapper e) {
+	respond(indent + "⏸ $e.value $e.name $e.device") //
+}
+void respondToPlaybackStatusStopped(physicalgraph.app.EventWrapper e) {
+	respond(indent + "⏹ $e.value $e.name $e.device") //
 }
 
 private void initialize() {
 	subscribe switchTriggers		, 'switch.on'				, respondToSwitchOn
 	subscribe contactSensorTriggers	, 'contact.closed'			, respondToContactClosed
 	subscribe mediaPlaybackTriggers	, 'playbackStatus.playing'	, respondToPlaybackStatusPlaying
+	subscribe mediaPlaybackTriggers	, 'playbackStatus.paused'	, respondToPlaybackStatusPaused
+    if (turnOffToo) {
+	subscribe switchTriggers		, 'switch.off'				, respondToSwitchOff
+	subscribe contactSensorTriggers	, 'contact.open'			, respondToContactOpen
+	subscribe mediaPlaybackTriggers	, 'playbackStatus.stopped'	, respondToPlaybackStatusStopped
+    }
 }
 
 def installed() {
